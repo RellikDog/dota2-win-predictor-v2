@@ -36,7 +36,7 @@ def clean_match_details(match):
     '''
     data = match['result']
     out = {}
-    out['match_id'] = data['match_id']
+    out['_id'] = data['match_id']
     out['radiant_win'] = int(data['radiant_win'])
     out['match_date'] = data['start_time']
     out['radiant_hero_ids'] = []
