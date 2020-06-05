@@ -26,7 +26,7 @@ def populate_db(runs=1, IDs_less_than=None):
             Prints errors
     
     '''
-    #Match ID set to none to start at begining otherwise passed in as a list
+    #Match ID set to none to start at begining otherwise starts after ID
     if IDs_less_than == None: 
         match_IDs = None
     else:

@@ -4301,7 +4301,7 @@ def name_id(name, heroes=heroes):
             
     Output:
         
-        1: Int - Hero ID associated with the passed in name if found, if not, returns None
+        Int - Hero ID associated with the passed in name if found, if not, returns None
     '''
     for hero in heroes:
         if name == hero['localized_name']:
@@ -4323,7 +4323,7 @@ def id_name(hero_id, heroes=heroes):
     
     Output:
     
-        1: Str - localized name associated with hero ID
+        Str - localized name associated with hero ID
     '''
     try:
         return heroes[str(hero_id)]['localized_name']
