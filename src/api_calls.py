@@ -1,29 +1,29 @@
 import requests
 
 def get_match_history(less_then_match_id=None):
-        """
-        Makes api call to open dota pro matches route
-        Returns list of 100 match result objects
-        If a match Id is provided 100 matches before specified match are returned
+    """
+    Makes api call to open dota pro matches route
+    Returns list of 100 match result objects
+    If a match Id is provided 100 matches before specified match are returned
         
-        Input:
+    Input:
             
-            None: Retruns 100 most recent matches
-                or
-            less_then_match_id(int): Id of match to retrun results before
+        None: Retruns 100 most recent matches
+            or
+        less_then_match_id(int): Id of match to retrun results before
             
-        Output:
+    Output:
             
-            data(list): list of match objects(docs at https://docs.opendota.com/#tag/pro-matches)
-        """
-        if less_then_match_id == None:
-            response = requests.get('https://api.opendota.com/api/proMatches')
-        else:
-            response = requests.get(f'https://api.opendota.com/api/proMatches?less_than_match_id={less_then_match_id}')
-        #print(response)
-        data = response.json()
-        #print(data)
-        return data
+        data(list): list of match objects(docs at https://docs.opendota.com/#tag/pro-matches)
+    """
+    if less_then_match_id == None:
+        response = requests.get('https://api.opendota.com/api/proMatches')
+    else:
+        response = requests.get(f'https://api.opendota.com/api/proMatches?less_than_match_id={less_then_match_id}')
+    #print(response)
+    data = response.json()
+    #print(data)
+    return data
 
 def get_match_details(match_id):
     '''
