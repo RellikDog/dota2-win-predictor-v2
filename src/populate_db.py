@@ -31,6 +31,7 @@ def populate_db(runs=1, IDs_less_than=None):
         match_IDs = None
     else:
         match_IDs = [IDs_less_than]
+    #counter to break loop if too many reinserts
     #For as many runs as were specified
     for i in range(runs):
         print(f'Run: {i+1}')
@@ -40,6 +41,7 @@ def populate_db(runs=1, IDs_less_than=None):
             match_IDs = id_list_from_history(get_match_history())
         else:
             match_IDs = id_list_from_history(get_match_history(match_IDs[-1]))
+        duplicates = 0
         for match_id in match_IDs:
             try:
                 #insert just match id to check for duplicates
@@ -51,5 +53,10 @@ def populate_db(runs=1, IDs_less_than=None):
                 #print(f'Match {match_id} inserted')
             except pymongo.errors.DuplicateKeyError:
                 print('Match ID was already in the DB')
+                duplicates += 1
+                if duplicates > 10:
+                    break
             except:
                 print(f'Unknown Error: {sys.exc_info()[0]}')
+        if duplicates > 10:
+            break

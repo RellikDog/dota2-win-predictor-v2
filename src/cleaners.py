@@ -1,3 +1,6 @@
+from src.eda import make_counter
+import pandas as pd
+
 def id_list_from_history(data):
     '''
     Takes raw data returnd by api_calls.get_match_history() and returns a list of just the match ID's
@@ -47,3 +50,48 @@ def clean_match_details(match):
         else:
             out['dire_hero_ids'] += [player['hero_id']]
     return out
+
+def make_csv(counter, counter_data):
+    '''
+    Takes in a premade coutner using make_counter from eda.py and the data used to amke the counter and produces a CSV.
+    
+    Input:
+        
+        counter(Counter): 
+            Counter from all the DB data - used to generate unique columns
+            
+        counter_data(mongo cursor list):
+            return of .find() on the raw collection
+        
+    Output:
+        
+        None: Creates a csv file in the same directory as run 
+    '''
+    #remove count column so keys includes only hero ids
+    del counter['count']
+    uids = sorted(counter.keys())
+    uid_cols =  []
+    #add a column for each hero fro each team
+    for i in uids:
+        uid_cols += [(str(i)+'R')]
+        uid_cols += [(str(i)+'D')]
+    #add the initial 3 columns and combine with hero id columns
+    columns = ['match_id', 'match_date', 'radiant_win']
+    columns += uid_cols
+    #create a template for each row
+    row_template = {col: 0 for col in columns}
+    rows_list = []
+    #for each match format a row and add to list
+    for match in counter_data:
+        temp_row = row_template.copy()
+        temp_row['match_id'] = match['_id']
+        temp_row['match_date'] = match['match_date']
+        temp_row['radiant_win'] = match['radiant_win']
+        for indx, hid in enumerate(match['radiant_hero_ids']):
+            temp_row[(str(hid)+'R')] = 1
+            temp_row[(str(match['dire_hero_ids'][indx])+'D')] = 1
+        rows_list += [temp_row]
+    #use rows to create dataframe and print to csv
+    df = pd.DataFrame(rows_list)
+    df.to_csv('test.csv')
+    

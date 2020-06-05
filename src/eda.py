@@ -1,4 +1,9 @@
 from collections import Counter
+import sys
+import pymongo
+from pymongo import MongoClient
+client = MongoClient('localhost', 27017)
+db = client.dota_data
 
 def make_counter(data):
     '''
@@ -23,5 +28,12 @@ def make_counter(data):
                 c[match['dire_hero_ids'][indx]] += 1
         except:
             print(match)
-
+            try:
+                match = clean_match_details(get_match_details(match['_id']))
+                for indx, hero_id in enumerate(match['radiant_hero_ids']):
+                    c[hero_id] += 1
+                    c[match['dire_hero_ids'][indx]] += 1
+                db.raw.update_one({'_id':match['_id']}, {"$set": match}, upsert=True)
+            except:
+                print(f'Error: {sys.exc_info()[0]}')
     return c
