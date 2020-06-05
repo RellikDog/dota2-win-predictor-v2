@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+    <title>Dota2 Win Predictor</title>
+    <meta name="description" content="Dota2 Win Predictor">
+    <meta name="author" content="Ricahrd Bellamy">
+    <script src="static/brython.js"></script>
+  <script src="static/brython_stdlib.js"></script>
+</head>
+
+<body onload="brython()">
+    <h1>Dota2 Win Predictor Concept</h1>
+    <p>This app will predict the winners of dota games for you!</p>
+    <p>Please enter Heros for each team below!</p>
+
+    <div>
+        <!-- These have id's so that later we can pull out data using js. -->
+        <!-- Team A -->
+        <span>Team A - Hero 1:</span> <input id="a1"></input>
+        <span>Team A - Hero 2:</span> <input id="a2"></input>
+        <span>Team A - Hero 3:</span> <input id="a3"></input>
+        <span>Team A - Hero 4:</span> <input id="a4"></input>
+        <span>Team A - Hero 5:</span> <input id="a5"></input>
+    </div>
+
+    <div>
+        <!-- Team B -->
+        <span>Team B - Hero 1:</span> <input id="b1"></input>
+        <span>Team B - Hero 2:</span> <input id="b2"></input>
+        <span>Team B - Hero 3:</span> <input id="b3"></input>
+        <span>Team B - Hero 4:</span> <input id="b4"></input>
+        <span>Team B - Hero 5:</span> <input id="b5"></input>
+    </div>
+
+    <div>
+        <button type="button" id="solve">Predict!</button>
+    </div>
+    <div>
+        <!-- The span has an id so that later we can fill in the solution
+             using js. -->
+        <p> The solution is: <span id="solution"></span> </p>
+
+    <script type="text/python">
+
+        from browser import document, ajax, console
+        import json
+        
+        def get_input_coefficients():
+            a1 = document['a1'].value
+            a2 = document['a2'].value
+            a3 = document['a3'].value
+            a4 = document['a4'].value
+            a5 = document['a5'].value
+
+            b1 = document['b1'].value
+            b2 = document['b2'].value
+            b3 = document['b3'].value
+            b4 = document['b4'].value
+            b5 = document['b5'].value
+
+            return {'a1': str(a1),
+                    'a2': str(a2),
+                    'a3': str(a3),
+                    'a4': str(a4),
+                    'a5': str(a5),
+                    'b1': str(b1),
+                    'b2': str(b2),
+                    'b3': str(b3),
+                    'b4': str(b4),
+                    'b5': str(b5)}
+        
+        def display_solutions(req):
+            result = json.loads(req.text)
+            # note the syntax for setting the child text of an element
+            document['solution'].html = f"{result['prediction']}"
+
+        def send_coefficient_json(coefficients):
+            req = ajax.Ajax()
+            req.bind('complete', display_solutions)
+            req.open('POST',
+                    '/solve',
+                    True)
+            req.set_header('Content-Type', 'application/json')
+            req.send(json.dumps(coefficients))
+        
+        def click(event):
+            coefficients = get_input_coefficients()
+            send_coefficient_json(coefficients)
+        
+        document['solve'].bind('click', click)
+        
+        </script>
+        
+
+</body>
+</html>
