@@ -12,8 +12,10 @@ db = client.dota_data
 from src.heroes import heroes, name_id, id_name
 from src.eda import make_counter
 import pandas as pd
+import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from src.models import train_rfc
+import pickle
 #=================================================================================================================================
 #                                                     Routes
 #=================================================================================================================================
@@ -41,6 +43,7 @@ def solve():
     return jsonify({'prediction': prediction})
 
 def pred(a, b):
+    
     print(a, b)
     return 'Team A wins!'
 

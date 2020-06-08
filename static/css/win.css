@@ -1,0 +1,11 @@
+body {
+  margin: 0;
+}
+
+h1{
+    width: 100%;
+}
+
+#heroes{
+    overflow: scroll;
+}

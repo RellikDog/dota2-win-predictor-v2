@@ -1,5 +1,7 @@
 from src.eda import make_counter
 import pandas as pd
+import numpy as np
+from src.heroes import heroes, name_id, id_name
 
 def id_list_from_history(data):
     '''
@@ -95,3 +97,19 @@ def make_csv(counter, counter_data):
     df = pd.DataFrame(rows_list)
     df.to_csv('test.csv')
     
+def make_pred_row(df, rad, dire):
+    drop_cols = ['Unnamed: 0', 'match_id', 'match_date', 'Unnamed: 1', 'radiant_win']
+    for i in drop_cols:
+        try:
+            df.pop(i)
+        except:
+            continue
+    pred_row = pd.DataFrame([np.zeros(len(df.columns))], columns=df.columns)
+    for indx, hero in enumerate(rad):
+        #get radiant hero id - insert to pred row with R
+        rhid = name_id(hero)
+        pred_row[str(rhid)+'R'] = 1.0
+        #get radiant hero id - insert to pred row with D
+        dhid = name_id(dire[indx])
+        pred_row[str(dhid)+'D'] = 1.0   
+    return pred_row
