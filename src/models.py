@@ -34,3 +34,12 @@ def train_rfc(df):
     X = df
     trf.fit(X, y)
     pickle.dump(trf, open('rfc.pkl', 'wb'))
+
+    
+def rfc_pred(pred_row):
+    model = pickle.load(open('rfc.pkl', 'rb'))
+    prediction = model.predict(pred_row)
+    if prediction[0] == 1:
+        return 'Radiant Team Win'
+    else:
+        return 'Dire Team Win'

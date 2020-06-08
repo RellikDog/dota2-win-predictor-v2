@@ -4303,7 +4303,7 @@ def name_id(name, heroes=heroes):
         
         Int - Hero ID associated with the passed in name if found, if not, returns None
     '''
-    for hero in heroes:
+    for k, hero in heroes.items():
         if name == hero['localized_name']:
             return hero['id']
         else:
