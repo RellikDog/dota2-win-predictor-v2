@@ -98,13 +98,35 @@ def make_csv(counter, counter_data):
     df.to_csv('test.csv')
     
 def make_pred_row(df, rad, dire):
+    '''
+    Makes a row for predicitons to be made on
+    
+    Input:
+    
+        df(dataframe):
+            Read this is from test.csv - used to generate columns
+            
+        rad(list):
+            List of hero names recived from the front end for readiant team
+            
+        dire(list):
+            List of hero names recived from the front end for dire team
+            
+    Output:
+    
+        pred_row(pandas dataframe):
+            Converts heros names to IDs then adds ones to the DF in the appropriate slotfor their team 
+    '''
+    #drop unnessacary columns
     drop_cols = ['Unnamed: 0', 'match_id', 'match_date', 'Unnamed: 1', 'radiant_win']
     for i in drop_cols:
         try:
             df.pop(i)
         except:
             continue
+    #make blank row        
     pred_row = pd.DataFrame([np.zeros(len(df.columns))], columns=df.columns)
+    #fill in row
     for indx, hero in enumerate(rad):
         #get radiant hero id - insert to pred row with R
         rhid = name_id(hero)
