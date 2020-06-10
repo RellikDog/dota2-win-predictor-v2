@@ -6,7 +6,7 @@ from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
 db = client.dota_data
 
-def populate_db(runs=1, IDs_less_than=None):
+def populate_db(runs=20, IDs_less_than=None):
     '''
     Function to automatically make querries for pro match IDs, then make a querry for each matches details, clean the details and add them to a mongo database.
     
@@ -42,6 +42,7 @@ def populate_db(runs=1, IDs_less_than=None):
         else:
             match_IDs = id_list_from_history(get_match_history(match_IDs[-1]))
         duplicates = 0
+        errors = 0
         for match_id in match_IDs:
             try:
                 #insert just match id to check for duplicates
@@ -58,5 +59,10 @@ def populate_db(runs=1, IDs_less_than=None):
                     break
             except:
                 print(f'Unknown Error: {sys.exc_info()[0]}')
+                errors += 1
+                if errors > 10:
+                    break
         if duplicates > 10:
             break
+        if errors > 10:
+                    break

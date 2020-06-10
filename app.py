@@ -22,10 +22,12 @@ app = Flask(__name__)
 #                                                     Routes
 #=================================================================================================================================
 
+#Home Route
 @app.route('/', methods=['GET'])
 def index():
     return render_template('win-predictor.html')
 
+#Route to solve predictions
 @app.route('/solve', methods=['POST'])
 def solve():
     user_data = request.json
@@ -39,8 +41,8 @@ def solve():
     b3 = user_data['b3']
     b4 = user_data['b4']
     b5 = user_data['b5']
-    team_a = [a1, a2, a3, a4, a5]
-    team_b = [b1, b2, b3, b4, b5]
+    team_a = [a1, a2, a3, a4, a5]#Radiant
+    team_b = [b1, b2, b3, b4, b5]#Dire
     prediction = pred(team_a, team_b)
     return jsonify({'prediction': prediction})
 
